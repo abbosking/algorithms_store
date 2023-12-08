@@ -8,3 +8,11 @@ The Algorithm Store is a robust and dynamic platform designed to cater to algori
 
 Figma design: https://www.figma.com/file/EOKgH3txzrbMTOrfGpgYfU/Algorithms_store?type=design&node-id=0-1&mode=design&t=tMJibwFfMZThORS0-0
 
+
+
+Responsibilities:
+
+1. Frontend developer: Sultanbek Erkinbaev
+2. Backend developer: Miras Doshchanov
+3. Full-stack developer: Abbos Yuldashev
+4. QA Engineer: Bunyodbek Xolmurodov
