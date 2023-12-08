@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:algorithmstore/login_page.dart'; // Import your login page file
-import 'package:algorithmstore/bottom_nav_bar.dart'; // Import your bottom nav bar file
+import 'package:algorithmstore/login_page.dart';
+import 'package:algorithmstore/bottom_nav_bar.dart';
 
 void main() {
   runApp(MyApp());
