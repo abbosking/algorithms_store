@@ -56,6 +56,10 @@ class AlgorithmDetailPage extends StatelessWidget {
 }
 
 class AlgorithmsScreen extends StatefulWidget {
+  final String category;
+
+  AlgorithmsScreen({required this.category});
+
   @override
   _AlgorithmsScreenState createState() => _AlgorithmsScreenState();
 }
@@ -77,13 +81,16 @@ class _AlgorithmsScreenState extends State<AlgorithmsScreen> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       setState(() {
-        algorithms = jsonData.map((data) => Algorithm(
+        algorithms = jsonData
+            .where((data) => data['category'] == widget.category)
+            .map((data) => Algorithm(
           id: data['id'],
           category: data['category'],
           name: data['name'],
           description: data['description'],
           languages: Map<String, String>.from(data['languages']),
-        )).toList();
+        ))
+            .toList();
       });
     } else {
       throw Exception('Failed to load JSON data');
@@ -94,7 +101,7 @@ class _AlgorithmsScreenState extends State<AlgorithmsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Algorithms List'),
+        title: Text('Algorithms List - ${widget.category}'),
       ),
       body: Center(
         child: algorithms.isEmpty

@@ -29,10 +29,12 @@ class CategoriesPage extends StatelessWidget {
               leading: Icon(Icons.category, size: 40.0, color: Colors.blue),
               title: Text('Sorting Algorithms'),
               onTap: () {
-                // Navigate to Algorithms Screen
+                // Navigate to Algorithms Screen with the selected category
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AlgorithmsScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => AlgorithmsScreen(category: 'Sorting'),
+                  ),
                 );
               },
             ),
@@ -40,10 +42,12 @@ class CategoriesPage extends StatelessWidget {
               leading: Icon(Icons.category, size: 40.0, color: Colors.green),
               title: Text('Search Algorithms'),
               onTap: () {
-                // Navigate to Algorithms Screen
+                // Navigate to Algorithms Screen with the selected category
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AlgorithmsScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => AlgorithmsScreen(category: 'Searching'),
+                  ),
                 );
               },
             ),
@@ -51,10 +55,12 @@ class CategoriesPage extends StatelessWidget {
               leading: Icon(Icons.category, size: 40.0, color: Colors.red),
               title: Text('Graph Algorithms'),
               onTap: () {
-                // Navigate to Algorithms Screen
+                // Navigate to Algorithms Screen with the selected category
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AlgorithmsScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => AlgorithmsScreen(category: 'Graph'),
+                  ),
                 );
               },
             ),
