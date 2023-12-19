@@ -19,7 +19,7 @@ class CategoriesPage extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: AssetImage('assets/categories_image.jpg'), // Replace with your image path
+                  image: AssetImage('assets/profile.png'), // Replace with your image path
                 ),
               ),
             ),

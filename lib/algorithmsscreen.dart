@@ -1,61 +1,128 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class AlgorithmsScreen extends StatelessWidget {
+class Algorithm {
+  final int id;
+  final String category;
+  final String name;
+  final String description;
+  final Map<String, String> languages;
+
+  Algorithm({
+    required this.id,
+    required this.category,
+    required this.name,
+    required this.description,
+    required this.languages,
+  });
+}
+
+class AlgorithmDetailPage extends StatelessWidget {
+  final String name;
+  final String description;
+
+  AlgorithmDetailPage({required this.name, required this.description});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Algorithms'),
+        title: Text(name),
       ),
-      body: SingleChildScrollView(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image at the top
-            Container(
-              height: 200.0,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage('assets/profile.png'), // Replace with your image path
-                ),
+            Text(
+              'Description:',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18.0,
               ),
             ),
-            SizedBox(height: 16.0),
-            // Description of algorithms
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Explore a variety of algorithms used in computer science. Learn and implement algorithms to solve computational problems efficiently.',
-                style: TextStyle(fontSize: 18.0),
-              ),
+            SizedBox(height: 8.0),
+            Text(
+              description,
+              style: TextStyle(fontSize: 16.0),
             ),
-            SizedBox(height: 16.0),
-            // Icons representing programming languages
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Icon(Icons.code, size: 40.0, color: Colors.blue),
-                Icon(Icons.code, size: 40.0, color: Colors.green),
-                Icon(Icons.code, size: 40.0, color: Colors.red),
-                // Add more icons as needed
-              ],
-            ),
-            SizedBox(height: 16.0),
-            // List of algorithms (example: using ListTile)
-            ListTile(
-              leading: Icon(Icons.arrow_right),
-              title: Text('Bubble Sort'),
-              // Add onTap handler to navigate to details of the algorithm
-            ),
-            ListTile(
-              leading: Icon(Icons.arrow_right),
-              title: Text('Quick Sort'),
-              // Add onTap handler to navigate to details of the algorithm
-            ),
-            // Add more ListTiles for other algorithms
+            // Add programming language icons here if needed
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class AlgorithmsScreen extends StatefulWidget {
+  @override
+  _AlgorithmsScreenState createState() => _AlgorithmsScreenState();
+}
+
+class _AlgorithmsScreenState extends State<AlgorithmsScreen> {
+  late List<Algorithm> algorithms = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    final response = await http.get(
+      Uri.parse('https://abbosking.github.io/jsons/algorithms.json'),
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = json.decode(response.body);
+      setState(() {
+        algorithms = jsonData.map((data) => Algorithm(
+          id: data['id'],
+          category: data['category'],
+          name: data['name'],
+          description: data['description'],
+          languages: Map<String, String>.from(data['languages']),
+        )).toList();
+      });
+    } else {
+      throw Exception('Failed to load JSON data');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Algorithms List'),
+      ),
+      body: Center(
+        child: algorithms.isEmpty
+            ? CircularProgressIndicator()
+            : ListView.builder(
+          itemCount: algorithms.length,
+          itemBuilder: (context, index) {
+            Algorithm algorithm = algorithms[index];
+            return Card(
+              margin: EdgeInsets.all(8.0),
+              child: ListTile(
+                title: Text(algorithm.name),
+                subtitle: Text('Category: ${algorithm.category}'),
+                onTap: () {
+                  // Navigate to AlgorithmDetailPage on tap
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AlgorithmDetailPage(
+                        name: algorithm.name,
+                        description: algorithm.description,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
         ),
       ),
     );
