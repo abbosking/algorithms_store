@@ -3,118 +3,110 @@ import 'categories_page.dart';
 import 'login_page.dart';
 import 'account_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _onPageChanged(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  void _onBottomNavTapped(int index) {
+    _pageController.animateToPage(
+      index,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Algorithms Store'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Featured Algorithms',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 16),
-            // Replace the following container with your algorithm cards or list
-            Container(
-              height: 200,
-              color: Colors.grey[300],
-              child: Center(
-                child: Text('Algorithm Card 1'),
-              ),
-            ),
-            SizedBox(height: 16),
-            Container(
-              height: 200,
-              color: Colors.grey[300],
-              child: Center(
-                child: Text('Algorithm Card 2'),
-              ),
-            ),
-            // Add more algorithm cards as needed
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the Categories Page
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CategoriesPage()),
-                );
-              },
-              child: Text('View Categories'),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the Login Page
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              },
-              child: Text('Login (No authentication)'),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.category),
-            label: 'Categories',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Chat',
-          ),
-          BottomNavigationBarItem(
+        centerTitle: true,
+        actions: [
+          IconButton(
             icon: Icon(Icons.account_circle),
-            label: 'Account',
+            onPressed: () {
+              // Navigate to the Account Page
+              _onBottomNavTapped(3);
+            },
           ),
         ],
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        selectedFontSize: 14.0,
-        unselectedFontSize: 14.0,
-        currentIndex: 0,
-        onTap: (index) {
-          // Handle navigation when a bottom navigation icon is tapped
-          switch (index) {
-            case 0:
-            // Navigate to the Home Page
-              break;
-            case 1:
-            // Navigate to the Categories Page
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CategoriesPage()),
-              );
-              break;
-            case 2:
-            // Navigate to the Chat Page (not implemented in this example)
-              break;
-            case 3:
-            // Navigate to the Account Page
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AccountPage()),
-              );
-              break;
-          }
-        },
+        backgroundColor: Color(0xFF47FA41), // Set the background color
       ),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: _onPageChanged,
+        children: [
+          // Your Home Page content
+          buildPage("Home Page Content"),
+          // Categories Page
+          CategoriesPage(),
+          // Placeholder for Chat Page (replace with your implementation)
+          buildPage("Chat Page Content"),
+          // Account Page
+          AccountPage(),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Color(0xFF47FA41), // Set the background color
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.category),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.chat),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              label: '',
+            ),
+          ],
+          selectedItemColor: Colors.white, // Set the color of the selected icon
+          unselectedItemColor: Colors.grey, // Set the color of unselected icons
+          selectedFontSize: 14.0,
+          unselectedFontSize: 14.0,
+          currentIndex: _currentIndex,
+          onTap: _onBottomNavTapped,
+        ),
+      ),
+    );
+  }
+
+  Widget buildPage(String content) {
+    return Center(
+      child: Text(content),
     );
   }
 }
