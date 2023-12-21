@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -93,6 +94,11 @@ class _AccountPageState extends State<AccountPage> {
                       style: TextStyle(fontSize: 18.0)),
                   Text('Status: ${userAccount.status}',
                       style: TextStyle(fontSize: 18.0)),
+                  ElevatedButton(
+                      onPressed: (){
+                        FirebaseAuth.instance.signOut();
+                      },
+                      child: Text('Sign Out'))
                 ],
               ),
             );

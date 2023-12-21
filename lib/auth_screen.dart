@@ -1,29 +1,24 @@
-// login_screen.dart
+// auth_screen.dart
 
-import 'package:finalmp/home_page.dart';
+import 'package:finalmp/login_page.dart';
 import 'package:flutter/material.dart';
 import 'auth.dart';
 
-
-class LoginScreen extends StatelessWidget {
+class AuthScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  handleSubmit(BuildContext context) async {
+  bool _isLogin = false;
+
+  handleSubmit() async {
     if (_formKey.currentState!.validate()) {
       final email = _emailController.value.text;
       final password = _passwordController.value.text;
-      try {
+      if (_isLogin) {
         await Auth().signInWithEmailAndPassword(email, password);
-        // Navigate to HomeScreen on successful login
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
-      } catch (e) {
-        // Handle login failure, e.g., display an error message
-        print('Login failed: $e');
+      } else {
+        await Auth().registerWithEmailAndPassword(email, password);
       }
     }
   }
@@ -32,7 +27,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login Screen'),
+        title: Text('Auth Screen'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -68,9 +63,24 @@ class LoginScreen extends StatelessWidget {
               ),
               SizedBox(height: 16.0),
               ElevatedButton(
-                onPressed: () => handleSubmit(context),
-                child: Text('Login'),
+                onPressed: handleSubmit,
+                child: Text(_isLogin ? 'Login' : 'Register'),
               ),
+              if (!_isLogin)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _formKey.currentState!.reset();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                      );
+                    },
+                    child: Text('Switch to Login'),
+                  ),
+                ),
+
             ],
           ),
         ),
