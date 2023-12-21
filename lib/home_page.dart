@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'categories_page.dart';
-import 'login_page.dart';
-import 'account_page.dart';
+import 'algorithm/categories_page.dart';
+import 'account/login_page.dart';
+import 'account/account_page.dart';
 
 class HomePage extends StatefulWidget {
   @override

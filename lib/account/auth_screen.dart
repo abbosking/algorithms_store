@@ -1,6 +1,6 @@
 // auth_screen.dart
 
-import 'package:finalmp/login_page.dart';
+import 'package:finalmp/account/login_page.dart';
 import 'package:flutter/material.dart';
 import 'auth.dart';
 
