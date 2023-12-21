@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'algorithm_detail_page.dart';
+
 class Algorithm {
   final int id;
   final String category;
@@ -16,43 +18,6 @@ class Algorithm {
     required this.description,
     required this.languages,
   });
-}
-
-class AlgorithmDetailPage extends StatelessWidget {
-  final String name;
-  final String description;
-
-  AlgorithmDetailPage({required this.name, required this.description});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(name),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Description:',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18.0,
-              ),
-            ),
-            SizedBox(height: 8.0),
-            Text(
-              description,
-              style: TextStyle(fontSize: 16.0),
-            ),
-            // Add programming language icons here if needed
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class AlgorithmsScreen extends StatefulWidget {
@@ -114,15 +79,20 @@ class _AlgorithmsScreenState extends State<AlgorithmsScreen> {
               margin: EdgeInsets.all(8.0),
               child: ListTile(
                 title: Text(algorithm.name),
-                subtitle: Text('Category: ${algorithm.category}'),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Category: ${algorithm.category}'),
+                  ],
+                ),
                 onTap: () {
-                  // Navigate to AlgorithmDetailPage on tap
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => AlgorithmDetailPage(
                         name: algorithm.name,
                         description: algorithm.description,
+                        languages: algorithm.languages,
                       ),
                     ),
                   );
