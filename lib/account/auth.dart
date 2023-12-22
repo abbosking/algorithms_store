@@ -1,43 +1,82 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
-class Auth {
-  //Creating new instance of firebase auth
+class AuthMethod {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<void> registerWithEmailAndPassword(String email, String password) async {
+  // SignUp User
+
+  Future<String> signupUser({
+    required String email,
+    required String password,
+    required String address,
+    required String name,
+  }) async {
+    String res = "Some error Occurred";
     try {
-      // This will create a new user in our firebase
-      await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+      if (email.isNotEmpty ||
+          password.isNotEmpty ||
+          address.isNotEmpty ||
+          name.isNotEmpty) {
+        // register user in auth with email and password
+        UserCredential cred = await _auth.createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        // add user to your  firestore database
+        print(cred.user!.uid);
+        await _firestore.collection("users").doc(cred.user!.uid).set({
+          'name': name,
+          'uid': cred.user!.uid,
+          'email': email,
+          'address': address,
+        });
+
+        res = "success";
       }
-    } catch (e) {
-      print(e);
+    } catch (err) {
+      return err.toString();
     }
+    return res;
   }
 
-  Future<void> signInWithEmailAndPassword(String email, String password) async {
+  // logIn user
+  Future<String> loginUser({
+    required String email,
+    required String password,
+  }) async {
+    String res = "Some error Occurred";
     try {
-      // This will Log in the existing user in our firebase
-      await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+      if (email.isNotEmpty || password.isNotEmpty) {
+        // logging in user with email and password
+        await _auth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        res = "success";
+      } else {
+        res = "Please enter all the fields";
       }
-    } catch (e) {
-      print(e);
+    } catch (err) {
+      return err.toString();
     }
+    return res;
+  }
+
+  // for sighout
+  Future<void> signOut() async {
+    await _auth.signOut();
   }
 }
+
+// StreamBuilder(
+//   stream: FirebaseAuth.instance.authStateChanges(),
+//   builder: (context, snapshot) {
+//     if (snapshot.hasData) {
+//       return const HomePage();
+//     } else {
+//       return const AuthSplashScreen();
+//     }
+//   },
+// ),

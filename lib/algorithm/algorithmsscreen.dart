@@ -38,6 +38,8 @@ class _AlgorithmsScreenState extends State<AlgorithmsScreen> {
   @override
   void initState() {
     super.initState();
+    // Initialize the algorithms list in initState
+    algorithms = [];
     fetchData();
   }
 

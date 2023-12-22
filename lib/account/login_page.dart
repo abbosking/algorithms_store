@@ -1,80 +1,124 @@
-// login_screen.dart
-
+import 'package:finalmp/account/snack_bar.dart';
 import 'package:finalmp/home_page.dart';
 import 'package:flutter/material.dart';
+
+import '../textfield_input.dart';
 import 'auth.dart';
+import 'auth_screen.dart';
 
 
-class LoginScreen extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
 
-  handleSubmit(BuildContext context) async {
-    if (_formKey.currentState!.validate()) {
-      final email = _emailController.value.text;
-      final password = _passwordController.value.text;
-      try {
-        await Auth().signInWithEmailAndPassword(email, password);
-        // Navigate to HomeScreen on successful login
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
-      } catch (e) {
-        // Handle login failure, e.g., display an error message
-        print('Login failed: $e');
-      }
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<LoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
+
+// email and passowrd auth part
+  void loginUser() async {
+    setState(() {
+      isLoading = true;
+    });
+    // signup user using our authmethod
+    String res = await AuthMethod().loginUser(
+        email: emailController.text, password: passwordController.text);
+
+    if (res == "success") {
+      setState(() {
+        isLoading = false;
+      });
+      //navigate to the home screen
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => HomePage()));
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      // show error
+      showSnackBar(context, res);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login Screen'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                controller: _emailController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  hintText: 'Email',
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+          child: SizedBox(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: height / 3),
+                TextFieldInput(
+                    textEditingController: emailController,
+                    hintText: 'Enter your email',
+                    textInputType: TextInputType.text),
+                const SizedBox(
+                  height: 24,
                 ),
-              ),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  hintText: 'Password',
+                TextFieldInput(
+                  textEditingController: passwordController,
+                  hintText: 'Enter your passord',
+                  textInputType: TextInputType.text,
+                  isPass: true,
                 ),
-              ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () => handleSubmit(context),
-                child: Text('Login'),
-              ),
-            ],
-          ),
-        ),
-      ),
+                const SizedBox(
+                  height: 24,
+                ),
+                InkWell(
+                  onTap: loginUser,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      decoration: const ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(4))),
+                          color: Colors.blue),
+                      child: const Text("Log in"),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: height / 3.1,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Don't have an account?"),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const SignupScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "SignUp",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          )),
     );
   }
 }
