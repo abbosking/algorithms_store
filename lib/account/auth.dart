@@ -5,6 +5,17 @@ class AuthMethod {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  String getCurrentUserUid() {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      return user.uid;
+    } else {
+      // Handle the case when the user is not logged in
+      // You might want to throw an exception or return a default value
+      throw Exception('User not logged in');
+    }
+  }
+
   // SignUp User
 
   Future<String> signupUser({

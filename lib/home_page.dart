@@ -44,6 +44,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Algorithms Store'),
         centerTitle: true,
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             icon: Icon(Icons.account_circle),

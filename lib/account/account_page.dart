@@ -1,104 +1,53 @@
-import 'dart:convert';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Account {
-  final int id;
-  final String username;
-  final String email;
-  final String bio;
-  final String status;
-  final String profileImage;
-
-  Account({
-    required this.id,
-    required this.username,
-    required this.email,
-    required this.bio,
-    required this.status,
-    required this.profileImage,
-  });
-
-  factory Account.fromJson(Map<String, dynamic> json) {
-    return Account(
-      id: json['id'],
-      username: json['username'],
-      email: json['email'],
-      bio: json['bio'],
-      status: json['status'],
-      profileImage: json['profileImage'],
-    );
-  }
-}
+import 'login_page.dart';
 
 class AccountPage extends StatefulWidget {
+  const AccountPage({super.key});
+
   @override
-  _AccountPageState createState() => _AccountPageState();
+  State<AccountPage> createState() => _AccountPageState();
 }
 
 class _AccountPageState extends State<AccountPage> {
-  late Future<Account> account;
+  late Future<DocumentSnapshot<Map<String, dynamic>>> userFuture;
 
   @override
   void initState() {
     super.initState();
-    account = loadAccount();
+    userFuture = getUserData();
   }
 
-  Future<Account> loadAccount() async {
-    final response = await http.get(
-      Uri.parse('https://abbosking.github.io/jsons/account.json'),
-    );
-
-    if (response.statusCode == 200) {
-      Map<String, dynamic> accountMap = json.decode(response.body);
-      return Account.fromJson(accountMap['account']);
-    } else {
-      throw Exception('Failed to load account data');
-    }
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUserData() async {
+    String uid = AuthMethod().getCurrentUserUid();
+    return await FirebaseFirestore.instance.collection("users").doc(uid).get();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Account'),
-      ),
-      body: FutureBuilder<Account>(
-        future: account,
-        builder: (context, snapshot) {
+      body: FutureBuilder(
+        future: userFuture,
+        builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error loading account data.'));
-          } else if (!snapshot.hasData) {
-            return Center(child: Text('No account data available.'));
+            return Center(child: Text("Error: ${snapshot.error}"));
           } else {
-            Account userAccount = snapshot.data!;
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
+            var userData = snapshot.data!.data();
+            return Center(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircleAvatar(
-                    radius: 60.0,
-                    backgroundImage: NetworkImage(userAccount.profileImage),
+                  Text(
+                    "Welcome, ${userData!['name']}",
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 16.0),
-                  Text('Username: ${userAccount.username}',
-                      style: TextStyle(fontSize: 18.0)),
-                  Text('Email: ${userAccount.email}',
-                      style: TextStyle(fontSize: 18.0)),
-                  Text('Bio: ${userAccount.bio}',
-                      style: TextStyle(fontSize: 18.0)),
-                  Text('Status: ${userAccount.status}',
-                      style: TextStyle(fontSize: 18.0)),
-                  ElevatedButton(
-                      onPressed: (){
-                        FirebaseAuth.instance.signOut();
-                      },
-                      child: Text('Sign Out'))
+                  // Display other user information as needed
+                  Text("Email: ${userData['email']}"),
+                  Text("Address: ${userData['address']}"),
                 ],
               ),
             );
