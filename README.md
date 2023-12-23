@@ -16,3 +16,6 @@ Responsibilities:
 2. Backend developer: Miras Doshchanov
 3. Full-stack developer: Abbos Yuldashev
 4. QA Engineer: Bunyodbek Xolmurodov
+
+Here is our custom app icon
+![icon1](https://github.com/abbosking/algorithms_store/assets/105731575/abc9bbb0-497b-439d-b2b4-4f8c1492f139)
