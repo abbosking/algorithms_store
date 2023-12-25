@@ -48,6 +48,15 @@ class _AccountPageState extends State<AccountPage> {
                   // Display other user information as needed
                   Text("Email: ${userData['email']}"),
                   Text("Address: ${userData['address']}"),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await AuthMethod().signOut();
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ));
+                    },
+                    child: const Text("LogOut"),
+                  )
                 ],
               ),
             );
