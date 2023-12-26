@@ -1,3 +1,4 @@
+import 'package:finalmp/algorithm/category_switch.dart';
 import 'package:flutter/material.dart';
 import 'algorithm/categories_page.dart';
 import 'account/login_page.dart';
@@ -63,7 +64,7 @@ class _HomePageState extends State<HomePage> {
           // Your Home Page content
           buildPage("Home Page Content"),
           // Categories Page
-          CategoriesPage(),
+          const CategorySwitch(),
           // Placeholder for Chat Page (replace with your implementation)
           buildPage("Chat Page Content"),
           // Account Page

@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class CategoriesPage extends StatefulWidget {
-  const CategoriesPage({Key? key}) : super(key: key);
+class CategoriesPage1 extends StatefulWidget {
+  const CategoriesPage1({Key? key}) : super(key: key);
 
   @override
-  State<CategoriesPage> createState() => _MyWidgetState();
+  State<CategoriesPage1> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends State<CategoriesPage> {
+class _MyWidgetState extends State<CategoriesPage1> {
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
