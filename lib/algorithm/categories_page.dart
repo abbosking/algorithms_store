@@ -1,5 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:finalmp/algorithm/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'image_store_method.dart';
 
 class CategoriesPage1 extends StatefulWidget {
   const CategoriesPage1({Key? key}) : super(key: key);
@@ -14,11 +20,25 @@ class _MyWidgetState extends State<CategoriesPage1> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _pythonCodeController = TextEditingController();
   final TextEditingController _javaCodeController = TextEditingController();
+  Uint8List? _file;
 
   final CollectionReference _algorithms =
   FirebaseFirestore.instance.collection('algorithms');
   String _selectedType = "";
   String _filterCategory = "";
+  String imageUrl = '';
+  Future<void> _imagecreaet() async {
+    Uint8List? imageFile = await pickImage(ImageSource.gallery);
+    if (imageFile != null) {
+      String url = await ImageStoreMethods().imageToStorage(imageFile);
+
+      setState(() {
+        _file = imageFile;
+        imageUrl = url;
+      });
+    }
+  }
+
 
   Future<void> _create() async {
     await showModalBottomSheet(
@@ -99,6 +119,10 @@ class _MyWidgetState extends State<CategoriesPage1> {
                       hintText: 'e.g., void bubbleSort(int arr[]) { ... }',
                     ),
                   ),
+                  IconButton(
+                    icon: const Icon(Icons.image),
+                    onPressed:_imagecreaet
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
@@ -121,7 +145,9 @@ class _MyWidgetState extends State<CategoriesPage1> {
                             "python": pythonCode,
                             "java": javaCode,
                           },
+                          "imageUrl": imageUrl,
                         });
+                        showSnackBar('Algorithm created successfully', context);
 
                         _nameController.text = '';
                         _descriptionController.text = '';
@@ -235,6 +261,10 @@ class _MyWidgetState extends State<CategoriesPage1> {
                       hintText: 'e.g., void bubbleSort(int arr[]) { ... }',
                     ),
                   ),
+                  IconButton(
+                      icon: const Icon(Icons.image),
+                      onPressed:_imagecreaet
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -256,6 +286,7 @@ class _MyWidgetState extends State<CategoriesPage1> {
                           "python": pythonCode,
                           "java": javaCode,
                         },
+                        "imageUrl": imageUrl,
                       })
                           .then((value) => print("Algorithm updated"))
                           .catchError((error) =>

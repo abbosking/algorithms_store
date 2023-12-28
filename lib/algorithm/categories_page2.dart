@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'algorithm_detail_page.dart';
+
 class CategoriesPage2 extends StatefulWidget {
   const CategoriesPage2({Key? key}) : super(key: key);
 
@@ -69,15 +71,38 @@ class _MyWidgetState extends State<CategoriesPage2> {
               itemCount: algorithms.length,
               itemBuilder: (context, index) {
                 final DocumentSnapshot documentSnapshot = algorithms[index];
+                final Map<String, dynamic> languages = documentSnapshot['languages'];
+
                 return Card(
                   margin: const EdgeInsets.all(10),
-                  child: ListTile(
-                    title: Text(documentSnapshot['name']),
-                    subtitle: Text(documentSnapshot['category']),
+                  child: // Inside CategoriesPage2's StreamBuilder, in the ListView.builder
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to the algorithm description page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AlgorithmDescriptionPage(
+                            algorithmName: documentSnapshot['name'],
+                            algorithmCategory: documentSnapshot['category'],
+                            algorithmDescription: documentSnapshot['description'],
+                            pythonCode: languages['python'],
+                            javaCode: languages['java'],
+                            imageUrl: documentSnapshot['imageUrl'] ?? '', // Pass the image URL
+                          ),
+                        ),
+                      );
+                    },
+                    child: ListTile(
+                      title: Text(documentSnapshot['name']),
+                      subtitle: Text(documentSnapshot['category']),
+                    ),
                   ),
+
                 );
               },
             );
+
           }
           return const Center(
             child: CircularProgressIndicator(),

@@ -13,6 +13,7 @@ void main() async {
       appId: '1:915784461572:android:b033fc05117f7de8e4f451',
       messagingSenderId: '915784461572',
       projectId: 'algorithmauth',
+        storageBucket: "gs://algorithmauth.appspot.com"
     ),
   );
   runApp(MyApp());

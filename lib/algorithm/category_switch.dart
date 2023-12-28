@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 
 import '../account/auth.dart';
 
-
-
 class CategorySwitch extends StatefulWidget {
   const CategorySwitch({super.key});
 
@@ -40,30 +38,16 @@ class _CategorySwitchState extends State<CategorySwitch> {
             return Center(child: Text("Error: ${snapshot.error}"));
           } else {
             var userData = snapshot.data!.data();
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      var userType = userData?['userType'];
-                      if (userType == 'admin') {
-                        // Navigate to Category1Page for admin
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) =>  const CategoriesPage1(),
-                        ));
-                      } else {
-                        // Navigate to Category2Page for non-admin users
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) =>  const CategoriesPage2(),
-                        ));
-                      }
-                    },
-                    child: const Text("Go to Category Page"),
-                  )
-                ],
-              ),
-            );
+
+            // Perform navigation based on user type
+            var userType = userData?['userType'];
+            if (userType == 'admin') {
+              // Navigate to Category1Page for admin
+              return CategoriesPage1();
+            } else {
+              // Navigate to Category2Page for non-admin users
+              return CategoriesPage2();
+            }
           }
         },
       ),

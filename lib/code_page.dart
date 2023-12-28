@@ -24,28 +24,28 @@ class CodePage extends StatelessWidget {
           children: [
             Text(
               'Algorithm: $algorithmName',
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18.0,
               ),
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Text(
               'Language: $language',
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18.0,
               ),
             ),
             SizedBox(height: 16.0),
-            Text(
+            const Text(
               'Code:',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18.0,
               ),
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Expanded(
               child: SingleChildScrollView(
                 child: Text(

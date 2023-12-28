@@ -1,34 +1,27 @@
-// Import necessary packages and icons
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../code_page.dart';
+class AlgorithmDescriptionPage extends StatelessWidget {
+  final String algorithmName;
+  final String algorithmCategory;
+  final String algorithmDescription;
+  final String pythonCode;
+  final String javaCode;
+  final String imageUrl; // Add imageUrl variable
 
-class AlgorithmDetailPage extends StatelessWidget {
-  final String name;
-  final String description;
-  final Map<String, String> languages;
-
-  AlgorithmDetailPage({
-    required this.name,
-    required this.description,
-    required this.languages,
+  AlgorithmDescriptionPage({
+    required this.algorithmName,
+    required this.algorithmCategory,
+    required this.algorithmDescription,
+    required this.pythonCode,
+    required this.javaCode,
+    required this.imageUrl,
   });
-
-  // Map language names to corresponding FontAwesome icons
-  final Map<String, IconData> languageIcons = {
-    'python': FontAwesomeIcons.python,
-    'java': FontAwesomeIcons.java,
-    'cpp': FontAwesomeIcons.code,
-    'javascript': FontAwesomeIcons.js,
-    // Add more language icons as needed
-  };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(name),
+        title: Text(algorithmName),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -36,51 +29,43 @@ class AlgorithmDetailPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Description:',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18.0,
-              ),
+              'Category: $algorithmCategory',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8.0),
+            SizedBox(height: 10),
             Text(
-              description,
-              style: TextStyle(fontSize: 16.0),
+              'Description: $algorithmDescription',
+              style: TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 16.0),
+            SizedBox(height: 20),
+            // Display the image if available
+            imageUrl.isNotEmpty
+                ? Image.network(
+              imageUrl,
+              width: double.infinity,
+              height: 200,
+              fit: BoxFit.cover,
+            )
+                : Container(),
+            SizedBox(height: 20),
             Text(
-              'Programming Languages:',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18.0,
-              ),
+              'Python Code:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8.0),
-            Row(
-              children: languages.keys.map((language) {
-                return GestureDetector(
-                  onTap: () {
-                    // Handle the tap event, e.g., navigate to CodePage
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CodePage(
-                          algorithmName: name,
-                          language: language,
-                          code: languages[language] ?? '',
-                        ),
-                      ),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      languageIcons[language],
-                      size: 40.0,
-                    ),
-                  ),
-                );
-              }).toList(),
+            SizedBox(height: 10),
+            Text(
+              pythonCode,
+              style: TextStyle(fontSize: 16, fontFamily: 'monospace'),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Java Code:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Text(
+              javaCode,
+              style: TextStyle(fontSize: 16, fontFamily: 'monospace'),
             ),
           ],
         ),
