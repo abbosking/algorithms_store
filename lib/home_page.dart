@@ -12,13 +12,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   late PageController _pageController;
-
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
   }
-
   @override
   void dispose() {
     _pageController.dispose();
@@ -105,7 +103,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
   Widget buildPage(String content) {
     return Center(
       child: Text(content),
