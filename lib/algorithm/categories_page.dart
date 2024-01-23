@@ -51,17 +51,17 @@ class _MyWidgetState extends State<CategoriesPage1> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return SingleChildScrollView(
-                child: Padding(
+              child: Padding(
                 padding: EdgeInsets.only(
-                top: 20,
-                right: 20,
-                left: 20,
-                bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
-            ),
-            child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+                  top: 20,
+                  right: 20,
+                  left: 20,
+                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                   const Center(
                     child: Text(
                       "Create your algorithm",
@@ -202,16 +202,12 @@ class _MyWidgetState extends State<CategoriesPage1> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return SingleChildScrollView(
-                child: Container(
-                constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.8,
-            ),
-            child: Padding(
-            padding: EdgeInsets.only(
-            top: 20,
-            right: 20,
-            left: 20,
-            bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+                child: Padding(
+                padding: EdgeInsets.only(
+                top: 20,
+                right: 20,
+                left: 20,
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
             ),
             child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -316,7 +312,8 @@ class _MyWidgetState extends State<CategoriesPage1> {
                     child: const Text("Update"),
                   ),
                 ],
-            ),),),
+              ),
+                ),
             );
           },
         );
