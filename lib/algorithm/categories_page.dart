@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalmp/algorithm/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 import 'image_store_method.dart';
 
@@ -15,11 +16,13 @@ class CategoriesPage1 extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<CategoriesPage1> {
+  final Uuid _uuid = Uuid();
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _pythonCodeController = TextEditingController();
   final TextEditingController _javaCodeController = TextEditingController();
+
   Uint8List? _file;
 
   final CollectionReference _algorithms =
@@ -47,16 +50,18 @@ class _MyWidgetState extends State<CategoriesPage1> {
       builder: (BuildContext ctx) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return Padding(
-              padding: EdgeInsets.only(
-                  top: 20,
-                  right: 20,
-                  left: 20,
-                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+            return SingleChildScrollView(
+                child: Padding(
+                padding: EdgeInsets.only(
+                top: 20,
+                right: 20,
+                left: 20,
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+            ),
+            child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
                   const Center(
                     child: Text(
                       "Create your algorithm",
@@ -136,8 +141,10 @@ class _MyWidgetState extends State<CategoriesPage1> {
                         final String pythonCode =
                             _pythonCodeController.text;
                         final String javaCode = _javaCodeController.text;
+                        final String algorithmId = _uuid.v4();
 
                         await _algorithms.add({
+                          "algorithmId": algorithmId,
                           "category": category,
                           "name": name,
                           "description": description,
@@ -161,6 +168,7 @@ class _MyWidgetState extends State<CategoriesPage1> {
                   ),
                 ],
               ),
+                ),
             );
           },
         );
@@ -193,83 +201,88 @@ class _MyWidgetState extends State<CategoriesPage1> {
       builder: (BuildContext ctx) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return Padding(
-              padding: EdgeInsets.only(
-                top: 20,
-                right: 20,
-                left: 20,
-                bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Center(
-                    child: Text(
-                      "Update your algorithm",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  DropdownButton<String>(
-                    value: updatedCategory,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        updatedCategory = newValue!;
-                      });
-                    },
-                    items: const [
-                      DropdownMenuItem<String>(
-                        value: 'Sorting',
-                        child: Text('Sorting'),
-                      ),
-                      DropdownMenuItem<String>(
-                        value: 'Search',
-                        child: Text('Search'),
-                      ),
-                      // Add more categories as needed
-                    ],
-                  ),
-                  TextField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Name',
-                      hintText: 'e.g., Bubble Sort',
-                    ),
-                  ),
-                  TextField(
-                    controller: _descriptionController,
-                    decoration: const InputDecoration(
-                      labelText: 'Description',
-                      hintText: 'A simple sorting algorithm...',
-                    ),
-                  ),
-                  TextField(
-                    controller: _pythonCodeController,
-                    maxLines: null,
-                    keyboardType: TextInputType.multiline,
-                    decoration: const InputDecoration(
-                      labelText: 'Python Code',
-                      hintText: 'e.g., def bubble_sort(arr): ...',
-                    ),
-                  ),
-                  TextField(
-                    controller: _javaCodeController,
-                    maxLines: null,
-                    keyboardType: TextInputType.multiline,
-                    decoration: const InputDecoration(
-                      labelText: 'Java Code',
-                      hintText: 'e.g., void bubbleSort(int arr[]) { ... }',
-                    ),
-                  ),
-                  IconButton(
-                      icon: const Icon(Icons.image),
-                      onPressed:_imagecreaet
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
+            return SingleChildScrollView(
+                child: Container(
+                constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.8,
+            ),
+            child: Padding(
+            padding: EdgeInsets.only(
+            top: 20,
+            right: 20,
+            left: 20,
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+            ),
+            child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+            const Center(
+            child: Text(
+            "Update your algorithm",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            ),
+            DropdownButton<String>(
+            value: updatedCategory,
+            onChanged: (String? newValue) {
+            setState(() {
+            updatedCategory = newValue!;
+            });
+            },
+            items: const [
+            DropdownMenuItem<String>(
+            value: 'Sorting',
+            child: Text('Sorting'),
+            ),
+            DropdownMenuItem<String>(
+            value: 'Search',
+            child: Text('Search'),
+            ),
+            // Add more categories as needed
+            ],
+            ),
+            TextField(
+            controller: _nameController,
+            decoration: const InputDecoration(
+            labelText: 'Name',
+            hintText: 'e.g., Bubble Sort',
+            ),
+            ),
+            TextField(
+            controller: _descriptionController,
+            decoration: const InputDecoration(
+            labelText: 'Description',
+            hintText: 'A simple sorting algorithm...',
+            ),
+            ),
+            TextField(
+            controller: _pythonCodeController,
+            maxLines: null,
+            keyboardType: TextInputType.multiline,
+            decoration: const InputDecoration(
+            labelText: 'Python Code',
+            hintText: 'e.g., def bubble_sort(arr): ...',
+            ),
+            ),
+            TextField(
+            controller: _javaCodeController,
+            maxLines: null,
+            keyboardType: TextInputType.multiline,
+            decoration: const InputDecoration(
+            labelText: 'Java Code',
+            hintText: 'e.g., void bubbleSort(int arr[]) { ... }',
+            ),
+            ),
+            IconButton(
+            icon: const Icon(Icons.image),
+            onPressed: _imagecreaet,
+            ),
+            const SizedBox(
+            height: 20,
+            ),
+            ElevatedButton(
+            onPressed: () async {
                       final String category = updatedCategory;
                       final String name = _nameController.text;
                       final String description = _descriptionController.text;
@@ -303,7 +316,7 @@ class _MyWidgetState extends State<CategoriesPage1> {
                     child: const Text("Update"),
                   ),
                 ],
-              ),
+            ),),),
             );
           },
         );

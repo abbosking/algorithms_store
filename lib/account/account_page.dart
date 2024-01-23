@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'login_page.dart';
 
 class AccountPage extends StatefulWidget {
-  const AccountPage({super.key});
+  const AccountPage({Key? key});
 
   @override
   State<AccountPage> createState() => _AccountPageState();
@@ -28,6 +28,20 @@ class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Account'),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await AuthMethod().signOut();
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => const LoginScreen(),
+              ));
+            },
+            icon: Icon(Icons.logout),
+          ),
+        ],
+      ),
       body: FutureBuilder(
         future: userFuture,
         builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
@@ -37,26 +51,21 @@ class _AccountPageState extends State<AccountPage> {
             return Center(child: Text("Error: ${snapshot.error}"));
           } else {
             var userData = snapshot.data!.data();
-            return Center(
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "Welcome, ${userData!['name']}",
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
+                  SizedBox(height: 16),
                   // Display other user information as needed
                   Text("Email: ${userData['email']}"),
+                  SizedBox(height: 8),
                   Text("Address: ${userData['address']}"),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await AuthMethod().signOut();
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => const LoginScreen(),
-                      ));
-                    },
-                    child: const Text("LogOut"),
-                  )
                 ],
               ),
             );

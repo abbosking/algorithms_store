@@ -1,5 +1,4 @@
 
-
 class Post {
   final String description;
   final String postId;

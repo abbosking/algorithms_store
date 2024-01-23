@@ -83,6 +83,7 @@ class _MyWidgetState extends State<CategoriesPage2> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => AlgorithmDescriptionPage(
+                            algorithmsId: documentSnapshot['algorithmId'],
                             algorithmName: documentSnapshot['name'],
                             algorithmCategory: documentSnapshot['category'],
                             algorithmDescription: documentSnapshot['description'],

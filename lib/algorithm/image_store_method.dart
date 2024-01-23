@@ -21,8 +21,6 @@ class ImageStoreMethods {
     return downloadUrl;
   }
 
-
-
   Future<String> uploadPost(String description, Uint8List file) async {
     String res = 'Some Error Occurred';
     try {

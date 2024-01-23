@@ -10,8 +10,6 @@ class AuthMethod {
     if (user != null) {
       return user.uid;
     } else {
-      // Handle the case when the user is not logged in
-      // You might want to throw an exception or return a default value
       throw Exception('User not logged in');
     }
   }

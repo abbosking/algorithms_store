@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../comments/comments.dart';
+
 class AlgorithmDescriptionPage extends StatelessWidget {
   final String algorithmName;
   final String algorithmCategory;
   final String algorithmDescription;
   final String pythonCode;
   final String javaCode;
-  final String imageUrl; // Add imageUrl variable
+  final String imageUrl;
+  final String algorithmsId;// Add imageUrl variable
 
   AlgorithmDescriptionPage({
     required this.algorithmName,
@@ -15,6 +18,7 @@ class AlgorithmDescriptionPage extends StatelessWidget {
     required this.pythonCode,
     required this.javaCode,
     required this.imageUrl,
+    required this.algorithmsId,
   });
 
   @override
@@ -22,6 +26,19 @@ class AlgorithmDescriptionPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(algorithmName),
+        actions: [
+          // IconButton for comments
+          IconButton(
+            icon: Icon(Icons.comment),
+            onPressed: () {
+              // Navigate to the comments page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CommentsPage( algorithmId: algorithmsId,)),
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -73,3 +90,4 @@ class AlgorithmDescriptionPage extends StatelessWidget {
     );
   }
 }
+
